@@ -1,0 +1,147 @@
+import csv
+
+# словарь для хранеия
+
+students = {
+    "Иван": {"age":19 , "grades": [2,2,2]},
+    "Антон": {"age":18 , "grades": [5,5,5]}
+}
+# добавить студентов
+
+def add_student():
+    try:
+        name = input("Введите имя студента:")
+        age = int(input("Введите возраст:"))
+        grades_input = input("Введите оценки через пробел:")
+        grades = [int(g) for g in grades_input.split()]
+        students[name] = {"age": age, "grades": grades}
+        print("Студент  добавлен.")
+    except ValueError:
+        print("Ошибка: возраст и оценки должны быть числами.")
+
+
+# показать студентов
+
+def show_students():
+    if not students:
+        print("Студентов нет")
+    else:
+        for name, info in students.items():
+            print(f"{name}, {info['age']} лет, оценки: {info['grades']}")
+
+
+# Найти студента по имени
+
+def find_student():
+    name = input("Ввкдите имя студента:")
+    for student_name, info in students.items():
+        if student_name == name:
+            print(f"Найден студент:{student_name},{info['age']},{info['grades']}")
+        else: print("Студент не найден")
+
+
+# Удалить студента.
+
+def delete_student():
+    del_student = input("Ввдите имя:")
+    del students[del_student]
+    print("Студент удален")
+
+# Добавить новую оценку студенту.
+
+def add_grade():
+    name = input("ввелите имя студента")
+    if name in students:
+        grade = int(input("введите оценку"))
+        students[name]["grades"].append(grade)
+        print("Оценка добавлена")
+
+# Список студентов старше возраста
+
+def student_older():
+    age_limit = int(input("введите возраст:"))
+    for name, info in students.items():
+        if info["age"] > age_limit:
+            print(f"{name}, {info['age']} лет, оценки: {info['grades']}")
+
+        else: print("студент не найден")
+
+
+# Студенты с оценкой выше порога
+
+def grade_above():
+    grade_limit = int(input("Ввкдите число"))
+    for name, info in students.items():
+        if info["grades"][0] > grade_limit:
+            print(f"{name}, {info['age']} лет, оценки: {info['grades']}")
+
+# Экспортировать список студентов в CSV-вид (имя;возраст;оценки).
+
+def export_csv():
+    try:
+        with open("students.csv", "w", newline="", encoding="utf-8") as file: #with означает автоматически закроется при выходе из блока. newline="" предотвращает появление пустых строк между записями.
+            writer = csv.writer(file, delimiter=";") # delimiter=";" разделитель. создаёт объект writer из модуля csv, который будет записывать строки в файл.
+            for name, info in students.items():
+                grades_str = " ".join(map(str, info["grades"])) # объединение строк в строку
+                writer.writerow([name, info["age"], grades_str]) # записываем одну строку: имя, возраст, оценки и все будет разделено точкой с запятой
+    except Exception as e: # ловим любые ошибки. Переменная e содержит объект исключения
+        print("Ошибка при сохранении:", e)
+    else: # этот блок выполняется только если в try не было исключений
+        print("Данные успешно экспортированы в students.csv")
+    finally: # этот блок выполняется в любом случае
+        print("Операция экспорта завершена.")
+
+
+# Импортировать студентов из CSV.
+
+def import_csv():
+    try:
+        with open("students.csv", "r", encoding="utf-8") as file:
+            reader = csv.reader(file, delimiter=";")
+            for row in reader: # построчно перебирает записи из CSV
+                if len(row) != 3:
+                    continue
+                name, age, grades_str = row
+                try:
+                    age = int(age)
+                    grades = [int(g) for g in grades_str.split()] #делит строку по пробелам в список строк
+                except ValueError:
+                    continue # если данные некорректны (нечисловой возраст или оценки) — просто пропускаем эту строку и переходим к следующей.
+                students[name] = {"age": age, "grades": grades}
+    except FileNotFoundError:
+        print("Файл students.csv не найден.")
+    except Exception as e:
+        print("Ошибка при импорте:", e)
+    else:
+        print("Данные успешно импортированы.")
+    finally:
+        print("Операция импорта завершена.")
+
+
+
+while True:
+    print("Меню:")
+    print("1. Добавить студента")
+    print("2. Показать всех студентов")
+    print("3. Найти студента по имени")
+    print("4. Удалить студента")
+    print("5. Добавить новую оценку студенту")
+    print("6. Список студентов старше возраста")
+    print("7. Студенты с оценкой выше порога")
+    print("8. Экспорт в CSV")
+    print("9. Импорт из CSV")
+    print("0. Выход")
+
+    choice = input("Выберите действие:")
+
+    if choice == "1": add_student()
+    elif choice == "2": show_students()
+    elif choice == "3": find_student()
+    elif choice == "4": delete_student()
+    elif choice == "5": add_grade()
+    elif choice == "6": student_older()
+    elif choice == "7": grade_above()
+    elif choice == "8": export_csv()
+    elif choice == "9": import_csv()
+
+
