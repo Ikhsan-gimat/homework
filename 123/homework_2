@@ -1,0 +1,94 @@
+
+
+menu = {
+    "coffee": 120,
+    "tea": 80,
+    "sandwich": 200,
+    "cake": 150,
+    "juice": 100
+}
+
+# 2. Вывести всё меню, отсортированное:
+def show_menu(menu):
+    for name,price in sorted(menu.items(), key=lambda x: x[0]):
+        print(f"{name}: {price}")
+
+
+
+# 3. Посчитать среднюю цену блюда в меню.
+
+def sred_price(menu):
+    sred = sum(menu.values())/ len(menu)
+    print(f"Средняя цуна {sred:.2f} руб.")
+
+#4 . Добавить новые блюда в меню через ввод от пользователя.
+# Если блюдо уже есть, заменить цену.
+
+def add_dish(menu):
+    name= input("Введите блюдо:").lower()
+    price= int(input("Введите цену:"))
+    menu.update({name:price})
+    print(f"Блюдо {name} добавлено")
+
+
+# 5.Удалить блюдо из меню
+
+def remove_dish(menu):
+    name= input("введите название блюда:")
+    if menu.pop(name,None):  # - .pop метод для удаления жлемента в словарях
+        print("удалено")
+
+#6. Показать все блюда дешевле определённой цены N./
+# Использовать filter + lambda.
+
+def cheaper_than(menu):
+    N = int(input("Введдите цену:"))
+    cheap = filter(lambda item: item[1] < N, menu.items())
+    print(f"блюдa дешевле {N}:")
+    for name, price in cheap:
+        print(f"{name}: {price}")
+
+# 7. Самое дешёвое и дорогое
+
+def min_max(menu):
+    cheapest=min(menu.items(), key=lambda x: x[1])
+    expensive=max(menu.items(), key=lambda x: x[1])
+    print(f"Самое дещевое {cheapest}")
+    print(f"Самое дорогок {expensive}")
+
+
+# 8.Сделать список только напитков
+
+def drinls_only(menu):
+    drinks = ["coffee","tea","juice"]
+    filtred_drinks = filter(lambda item: item[0] in drinks, menu.items())
+    sorted_drinks = sorted(filtred_drinks, key=lambda x: x[1])
+    for drink in sorted_drinks: print(f"{drink[0]}: {drink[1]}")
+
+
+
+while True:
+
+    print("1. Показать меню")
+    print("2. Средняя цена")
+    print("3. Добавить блюдо")
+    print("4. Удалить блюдо")
+    print("5. Блюда дешевле N")
+    print("6. Самое дешёвое и дорогое")
+    print("7. Только напитки")
+    print("8. Сделать заказ")
+    print("9. Выход")
+
+    choice = input("Выберите действие: ")
+
+    if choice == "1": show_menu(menu)
+    elif choice == "2": sred_price(menu)
+    elif choice == "3": add_dish(menu)
+    elif choice == "4": remove_dish(menu)
+    elif choice == "5": cheaper_than(menu)
+    elif choice == "6": min_max(menu)
+    elif choice == "7": drinls_only(menu)
+    #elif choice == "8":
+    elif choice == "9":print("Выход.")
+    else:
+        print("Неверный выбор, попробуйте снова.")
