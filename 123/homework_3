@@ -1,0 +1,93 @@
+
+
+books = [
+    {"id": 1, "title": "Мастер и Маргарита", "author": "Булгаков", "year": 1966},
+    {"id": 2, "title": "Преступление и наказание", "author": "Достоевский", "year": 1866},
+    {"id": 3, "title": "Война и мир", "author": "Толстой", "year": 1869},
+    {"id": 4, "title": "Анна Каренина", "author": "Толстой", "year": 1877},
+    {"id": 5, "title": "Собачье сердце", "author": "Булгаков", "year": 1925}
+
+]
+
+
+# 1. Найти книгу по названию
+
+def books_title(books):
+    input_name = input("Введите название книги: ").strip().lower()
+    # strip - удаляет пробелы и тд lower - преобразует букаы в нижний решистер
+    for book in books:
+        if book["title"].strip().lower() == input_name:
+            #print(f"Найдена книга: {book['title']} — {book['author']}, {book['year']}")
+            return book
+    print("Ошибка: книга не найдена.")
+    return None
+
+
+
+
+# 3. Отсортировать книги по году издания пузырек
+
+def bubble_sort(books):
+    years = []
+    for book in books:
+        years.append(book["year"])
+        # append добавляет элкмент в конец списка
+
+
+    #years = [1966 , 1866 , 1869 , 1877 , 1925]
+    n = 5
+    for run in range(n-1):
+        for i in range(n-1 -run):
+            if years[i] > years[i+1]:
+                years[i],years[i+1] = years[i+1], years[i]
+    print(years)
+
+
+
+# 2.Найти все книги автора
+
+def author_name(books):
+    input_name = input("Введите автора: ").strip().lower()
+    found_books = []
+    for book in books:
+        if book["author"].strip().lower() == input_name:
+            found_books.append(book)
+
+    for b in found_books:
+        print(f"{b['title']} — {b['author']}, {b['year']}")
+    return found_books
+
+
+# 4.Добавить поиск книг по диапазону лет
+
+def secrh_book(books):
+    start_year = int(input("ввелите начальный год:"))
+    end_year = int(input("введите конечный год:"))
+    if start_year > end_year: start_year, end_year = end_year, start_year
+
+    found_books = []
+    for book in books:
+        if book["year"] >= start_year and book["year"] <= end_year:
+            found_books.append(book)
+
+            print(f"Книги изданные с {start_year} по {end_year}:")
+            for b in found_books:
+                print(f"{b['title']} — {b['author']}, {b['year']}")
+
+
+
+# menu
+while True:
+    print("Выберите действие:")
+    print("1. Найти книгу по названию:")
+    print("2.найти книги автора")
+    print("3.Отсортировать книги по году издания:")
+    print("4.Добавить поиск книг по диапазону лет")
+
+
+
+    choice = int(input())
+    if choice == 3:print(bubble_sort(books))
+    elif choice == 1:print(books_title(books))
+    elif choice == 2:print(author_name(books))
+    elif choice == 4:secrh_book(books)
