@@ -1,0 +1,88 @@
+from functools import reduce
+
+from prompt_toolkit import pep440
+
+people = [
+    {"name": "Анна", "age": 19, "hobby": "рисование", "salary": 40000},
+    {"name": "Илья", "age": 32, "hobby": "спорт", "salary": 85000},
+    {"name": "Катя", "age": 24, "hobby": "фото", "salary": 60000},
+    {"name": "Даня", "age": 17, "hobby": "игры", "salary": 0},
+    {"name": "Олег", "age": 45, "hobby": "рыбалка", "salary": 120000},
+    {"name": "Вика", "age": 28, "hobby": "чтение", "salary": 70000}
+]
+# Часть 1 — filter
+# Выберите всех, кто старше 25 лет.
+# Отфильтруйте тех, у кого зарплата выше 50 000.
+# Создайте новый список людей, у которых хобби начинается на букву “р”.
+
+print(list(filter(lambda p: p["age"] > 25, people)))
+
+print(list(filter(lambda p: p["salary"] > 50000, people)))
+
+result=[list(filter(lambda p: p["hobby"][0]=="р", people))]
+print(result)
+
+
+
+# Часть 2 — map
+# Получите список всех имён.
+# Увеличьте зарплату каждого на 10% (в новом списке).
+# Сделайте список строк вида "Имя: Возраст лет".
+
+print(list(map(lambda p: p["name"], people)))
+
+result_salary =[list(map(lambda p: (p["name"],p["salary"] *1.1),people))]
+print(result_salary)
+
+
+r=(list(map(lambda p: f"{p["name"]}: {p["age"]} Лет",people)))
+print(r)
+
+
+
+# Часть 3 — reduce
+# Найдите суммарную зарплату всех людей.
+# Найдите средний возраст с помощью reduce.
+# Найдите имя человека с максимальной зарплатой (через reduce, без max()).
+# Подсказка: from functools import reduce
+
+
+def sum_salary(people):
+    return reduce(lambda x, y: x + y["salary"], people,0)
+print(sum_salary(people))
+
+def sr_age(people):
+    age=reduce(lambda x,y: x + y["age"], people, 0)
+    return  age//len(people)
+print(sr_age(people))
+
+
+
+def max_zp(people):
+    max_person = reduce(lambda x, y: x if x["salary"] > y["salary"] else y, people)
+    return max_person["name"]
+
+print(max_zp(people))
+
+
+# Часть 4 — lambda
+# Отсортируйте людей по возрасту.
+# Отсортируйте по длине хобби.
+# Сделайте новую структуру данных: список из кортежей (имя, количество букв в имени).
+
+a =sorted(people, key=lambda x: x["age"])
+print(a)
+
+h = sorted(people,key = lambda x: len(x["hobby"]))
+print(h)
+
+n= []
+for name in people:
+    n.append((name["name"],len(name["name"])))
+print(n)
+
+
+
+# Финальное задание
+# Напишите одну строку кода, которая возвращает имена всех людей старше 20 лет с зарплатой больше 50 000 и хобби длиннее 4 символов.
+print(list(filter(lambda p: p["salary"] > 50000 and p["age"] > 20 and len(p["hobby"])>4,people)))
