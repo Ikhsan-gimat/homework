@@ -1,0 +1,54 @@
+ticket_cost = 500
+class Nomoney(Exception):
+    pass
+def validate_name(name):
+    if not name:
+        raise ValueError("Имя не может быть пустым")
+
+def validate_age(age):
+    if not age.isdigit():
+        raise ValueError("Возраст должен быть числом")
+    if int(age) < 12:
+        raise ValueError("Слишком маленький возраст")
+
+def validate_tickets(count):
+    if not count.isdigit():
+        raise ValueError("Некорректное количество билетов")
+    count = int(count)
+    if count <= 0 or count > 5:
+        raise ValueError("Некорректное количество билетов")
+def validate_budget(budget):
+    if not budget.isdigit():
+        raise ValueError("Некорректный бюджет")
+    if int(budget) < 0:
+        raise ValueError("Некорректный бюджет")
+def calculate_total(count):
+    return count * ticket_cost
+
+try:
+    name = input("Введите имя: ")
+    age = input("Введите возраст: ")
+    tickets = input("Введите количество билетов: ")
+    budget = input("Введите сумму для оплаты: ")
+
+    validate_tickets(tickets)
+    validate_budget(budget)
+    validate_name(name)
+    validate_age(age)
+
+    tickets = int(tickets)
+    budget = int(budget)
+
+    total_price = calculate_total(tickets)
+
+    if budget < total_price:
+        raise Nomoney("Недостаточно денег для покупки билетов")
+
+    print("Бронирование успешно!")
+    print(f"Имя: {name}")
+    print(f"Билетов: {tickets}")
+    print(f"К оплате: {total_price}")
+    print(f"Сдача: {budget - total_price}")
+
+except Exception as e:
+    print("Ошибка:", e)
